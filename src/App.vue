@@ -1,12 +1,58 @@
 <template>
-  <h1>Hello</h1>
+  <div class="container">
+    <HeaderItem title="Task Tracker" />
+    <TasksItem @toggle-reminder="toggleReminder" @delete-task="deleteTask" :tasks="tasks"/>
+  </div>
 </template>
 
 <script>
+import HeaderItem from './components/Header'
+import TasksItem from './components/Tasks'
 
 
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    HeaderItem,
+    TasksItem
+  },
+  data(){
+    return{
+      tasks: []
+    }
+  },
+  methods: {
+    deleteTask(id){
+      this.tasks = this.tasks.filter((task) => {
+        task.id != id
+      })
+    },
+    toggleReminder(id){
+      this.tasks = this.tasks.map((task) => task.id === id ? {...task, reminder: !task.reminder} : task)
+    }
+  },
+  created() {
+    this.tasks = [
+      {
+        id:1,
+        text: 'Doctors Appointment',
+        day: 'March 1st at 8:00am',
+        reminder: true
+      },
+      {
+        id:2,
+        text: 'Dentist Appointment',
+        day: 'March 2nd at 9:00am',
+        reminder: true
+      },
+      {
+        id:3,
+        text: 'Food shopping',
+        day: 'March 1st at 2:00pm',
+        reminder: false
+      },
+    ]
+  }
 }
 </script>
 
