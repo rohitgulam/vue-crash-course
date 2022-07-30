@@ -8,11 +8,11 @@ export default {
     name: 'Button',
     props: {
         text: String,
-        color: String
+        color: String,
     },
     methods: {
         onClick(){
-            console.log('Btn CLick');
+            this.$emit('btn-click')
         },
     }
 }
