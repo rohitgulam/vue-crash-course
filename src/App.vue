@@ -4,25 +4,22 @@
     @toggle-add-task="toggleAddTask" 
     title="Task Tracker" 
     :showAddTask="showAddTask" />
-    <div v-if="showAddTask" >
-      <AddTask @add-task="addTask" />
-    </div>
-    <TasksItem @toggle-reminder="toggleReminder" @delete-task="deleteTask" :tasks="tasks"/>
+    <router-view :showAddTask="showAddTask"></router-view>
+    <FooterItem />
   </div>
 </template>
 
 <script>
 import HeaderItem from './components/Header'
-import TasksItem from './components/Tasks'
-import AddTask from './components/AddTask'
+import FooterItem from './components/Footer'
+
 
 
 export default {
   name: 'App',
   components: {
+    FooterItem,
     HeaderItem,
-    TasksItem,
-    AddTask
   },
   data(){
     return{
@@ -33,42 +30,8 @@ export default {
   methods: {
     toggleAddTask(){
       this.showAddTask = !this.showAddTask
-    },
-    async addTask(task){
-      const res = await fetch('api/task', {
-        method: 'POST',
-        header:{
-          'Content-Type': 'apllication/json',
-        }, 
-        body: JSON.stringify(task)
-      })
-
-      const data = await res.json()
-      this.tasks = [...this.tasks, data]
-    },
-    deleteTask(id){
-      this.tasks = this.tasks.filter((task) => {
-        task.id != id
-      })
-    },
-    toggleReminder(id){
-      this.tasks = this.tasks.map((task) => task.id === id ? {...task, reminder: !task.reminder} : task)
-    },
-   async fetchTasks(){
-    const res = await fetch('api/tasks')
-    const data = await res.json()
-    return data
-   }
+    }
   },
-
-   async fetchTask(id){
-    const res = await fetch(`api/tasks/${id}`)
-    const data = await res.json()
-    return data
-   },
-  async created() {
-    this.tasks = await this.fetchTasks()
-  }
 }
 </script>
 
